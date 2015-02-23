@@ -16,7 +16,7 @@ describe Guard::Reek do
     subject(:start) { guard.start }
 
     it "runs all" do
-      guard.should_receive :run_all
+      expect(guard).to receive :run_all
 
       start
     end
@@ -26,7 +26,7 @@ describe Guard::Reek do
     subject(:run_all) { guard.run_all }
 
     it "runs reek" do
-      described_class.should_receive(:reek).with([])
+      expect(described_class).to receive(:reek).with([])
 
       run_all
     end
@@ -35,7 +35,7 @@ describe Guard::Reek do
       let(:options) { { run_all: false } }
 
       it "does not run reek" do
-        described_class.should_not_receive(:reek)
+        expect(described_class).to not_receive(:reek)
 
         run_all
       end
@@ -46,7 +46,7 @@ describe Guard::Reek do
     subject(:run_on_modifications) { guard.run_on_modifications "path" }
 
     it "runs changed paths" do
-      described_class.should_receive(:reek).with("path")
+      expect(described_class).to receive(:reek).with("path")
 
       run_on_modifications
     end
@@ -62,15 +62,15 @@ describe Guard::Reek do
     subject(:reek) { described_class.reek("paths") }
 
     it "calls the system" do
-      described_class.should_receive(:system)
+      expect(described_class).to receive(:system)
     end
 
     it "calls the reek command" do
-      described_class.should_receive(:command).with("paths")
+      expect(described_class).to receive(:command).with("paths")
     end
 
     it "notifies guard the ddsuccess" do
-      described_class.should_receive(:notify)
+      expect(described_class).to receive(:notify)
     end
 
     after do
