@@ -3,8 +3,8 @@ require 'guard'
 module Guard
   # Guard::Reek class, it implements an guard for reek task
   class Reek < Plugin
-    SUCCESS = ["Passed", { title: "Passed", image: :success }]
-    FAILED = ["Failed", { title: "Failed", image: :failed }]
+    SUCCESS = ["Reek passed", { title: "Reek passed", image: :success }]
+    FAILED = ["Reek failed", { title: "Reek failed", image: :failed }]
 
     attr_reader :last_result, :options
 
@@ -40,21 +40,13 @@ module Guard
     def self.reek(paths)
       result = system command(paths)
 
-      notify(result)
+      result ? Notifier.notify(*SUCCESS) : Notifier.notify(*FAILED)
       @last_result = result
       result
     end
 
     def self.command paths
       "reek -n #{paths.uniq.join(' ')}"
-    end
-
-    def self.notify result
-      if result
-        Notifier.notify(*SUCCESS)
-      else
-        Notifier.notify(*FAILED)
-      end
     end
   end
 end
